@@ -10,9 +10,18 @@ from flask import Flask, jsonify, render_template
 import flask_cors
 from flask_cors import CORS, cross_origin
 
+
+# Glen dependencies
 import joblib
 from sklearn.svm import SVC 
 import pickle
+# Import dependencies for Spotipy
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+# Import Client ID and Client Secret
+from config import cid, secret
+
+
 
 #################################################
 # Database Setup
@@ -95,6 +104,7 @@ def data():
 
     return jsonify(all_features)
 
+
 @app.route("/use_model/<feature:track_features>&<decade:decade")
 def predict_track(track_features, decade):
     if not 'track_features' in request.args:
@@ -135,6 +145,14 @@ def predict_track(track_features, decade):
         noncharting_prob = round(y_pred_proba[0][0],3) * 100
 
     return billboard_prob, noncharting_prob
+
+# SPOTIFY API
+# Create objects for accessing Spotify API
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+
+
 
 
 
