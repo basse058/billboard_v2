@@ -7,11 +7,19 @@ from sqlalchemy import create_engine, func
 from config import key
 from flask import Flask, jsonify, render_template
 
-from config import key
-
 # import flask_cors
 # from flask_cors import CORS, cross_origin
 
+# Glen dependencies
+import joblib
+from sklearn.svm import SVC 
+import pickle
+# Import dependencies for Spotipy
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+# Import Client ID and Client Secret
+from config import cid, secret, key
+import re
 
 #################################################
 # Database Setup
@@ -92,51 +100,51 @@ def data():
     return jsonify(all_features)
 
 
-# @app.route("/use_model/<feature:track_features>&<decade:decade")
-# def predict_track(track_features, decade):
-#     if not 'track_features' in request.args:
-#         return "Track features are missing"
-#     if not 'decade' in request.args:
-#         return "Select a decade"
+@app.route("/use_model/<track_features>/<decade>")
+def predict_track(track_features, decade):
+    if not 'track_features' in request.args:
+        return "Track features are missing"
+    if not 'decade' in request.args:
+        return "Select a decade"
     
-#     file_path = "./ML_models/"
-#     model_names = {"1960s": "model_1960s",
-#                 "1970s": "model_1970s",
-#                 "1980s": "model_1980s",
-#                 "1990s": "model_1990s",
-#                 "2000s": "model_2000s",
-#                 "2010s": "model_1970s"}
+    file_path = "./ML_models/"
+    model_names = {"1960s": "model_1960s",
+                "1970s": "model_1970s",
+                "1980s": "model_1980s",
+                "1990s": "model_1990s",
+                "2000s": "model_2000s",
+                "2010s": "model_1970s"}
     
-#     scaler_names = {"1960s": "scaler_1960s",
-#                 "1970s": "scaler_1970s",
-#                 "1980s": "scaler_1980s",
-#                 "1990s": "scaler_1990s",
-#                 "2000s": "scaler_2000s",
-#                 "2010s": "scaler_2010s"}
+    scaler_names = {"1960s": "scaler_1960s",
+                "1970s": "scaler_1970s",
+                "1980s": "scaler_1980s",
+                "1990s": "scaler_1990s",
+                "2000s": "scaler_2000s",
+                "2010s": "scaler_2010s"}
 
-#     # load model
-#     loaded_model = joblib.load(f"{file_path}{model_names[decade]}")
-#     loaded_scaler = joblib.load(f"{file_path}{scaler_names[decade]}")
+    # load model
+    loaded_model = joblib.load(f"{file_path}{model_names[decade]}")
+    loaded_scaler = joblib.load(f"{file_path}{scaler_names[decade]}")
 
-#     scaled_features = loaded_scaler.transform(track_features)
+    scaled_features = loaded_scaler.transform(track_features)
 
-#     # you can use loaded model to compute predictions
-#     y_predict = loaded_model.predict(scaled_features)
-#     y_pred_proba = loaded_model.predict_proba(scaled_features)
+    # you can use loaded model to compute predictions
+    y_predict = loaded_model.predict(scaled_features)
+    y_pred_proba = loaded_model.predict_proba(scaled_features)
 
-#     if y_predict[0] == 1:
-#         billboard_prob = round(y_pred_proba[0][0], 3) * 100
-#         noncharting_prob = round(y_pred_proba[0][1],3) * 100
-#     else:
-#         billboard_prob = round(y_pred_proba[0][1], 3) * 100
-#         noncharting_prob = round(y_pred_proba[0][0],3) * 100
+    if y_predict[0] == 1:
+        billboard_prob = round(y_pred_proba[0][0], 3) * 100
+        noncharting_prob = round(y_pred_proba[0][1],3) * 100
+    else:
+        billboard_prob = round(y_pred_proba[0][1], 3) * 100
+        noncharting_prob = round(y_pred_proba[0][0],3) * 100
 
-#     return billboard_prob, noncharting_prob
+    return billboard_prob, noncharting_prob
 
-# # SPOTIFY API
-# # Create objects for accessing Spotify API
-# client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
-# sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+# SPOTIFY API
+# Create objects for accessing Spotify API
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 
