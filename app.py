@@ -146,10 +146,140 @@ def predict_track(track_features, decade):
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+def search_spotify(song_title, artist):
+    try:
+        searchResults = sp.search(q=f"artist:{artist} track:{song_title}", type="track")
+        track_id = searchResults['tracks']['items'][0]['id']
 
+        return track_id
+    except:
+        pass
 
+def adjust_parens(song_title):
+    combinations = []
 
+    strip_parens = ' '.join(song_title.strip(')(').split(')'))
+    strip_parens = ' '.join(strip_parens.strip(' (').split('(')).replace('  ',' ')
+    combinations.append(strip_parens)
 
+    try:
+        inside_parens = re.findall(r'\(.*?\)', song_title)[0].strip('()').strip()
+    except IndexError:
+        pass
+        
+    try:
+        left_parens = song_title.split(f"({inside_parens})")[0].strip()
+        if (left_parens not in combinations) & (len(left_parens) > 0): 
+            combinations.append(left_parens)
+    except:
+        left_parens = "NA"
+
+    try:
+        right_parens = song_title.split(f"({inside_parens})")[1].strip()
+        if (right_parens not in combinations) & (len(right_parens) > 0): 
+            combinations.append(right_parens)
+    except:
+        right_parens = "NA"
+
+    return combinations
+
+# Create function to retrieve track ID from Spotify given the artist and song title
+@app.route("/search_spotify/<song_title>/<artist>")
+def get_track_features(song_title, artist):
+    while True:
+        # Select first artist if multiple listed with "Featuring" keyword
+        if 'Featuring' in artist:
+            artist = artist.split(' Featuring ')[0]
+        # Select first artist if multiple listed with "with", "With", or "," substrings
+        elif ' with ' in artist:
+            artist = artist.split(' with ')[0]
+        elif ' With ' in artist:
+            artist = artist.split(' With ')[0]
+        elif "," in artist:
+            artist = artist.split(',')[0]
+
+        # Make initial API search, return ID string if found
+        found_id = search_spotify(song_title, artist)
+        if found_id:
+            return get_audio_features(found_id)
+
+        # Search artist and song title (replacing words ending in "in" to "ing")
+        song_title = re.sub(r"in\b", 'ing ', song_title)
+        found_id = search_spotify(song_title, artist)
+        if found_id:
+            return get_audio_features(found_id)
+
+        if '(' in song_title:
+            for item in adjust_parens(song_title):
+                found_id = search_spotify(item, artist)
+                if found_id:
+                    return get_audio_features(found_id)
+                
+        # Check for '/' character in song_title
+        if '/' in song_title:
+            # Try string on left side of '/'
+            song_title = song_title.split('/')[0]
+            found_id = search_spotify(song_title, artist)
+            if found_id:
+                return get_audio_features(found_id)
+
+            # Try string on right side of '/'
+            try:
+                song_title = song_title.split('/')[1]
+                found_id = search_spotify(song_title, artist)
+                if found_id:
+                    return get_audio_features(found_id)
+            except:
+                pass
+
+        # Check for '&' character in artist name
+        if ' & ' in artist:
+            artist = artist.split(' & ')[0]
+            found_id = search_spotify(song_title, artist)
+            if found_id:
+                return get_audio_features(found_id)
+        # Check for 'X' character in artist name
+        if ' X ' in artist:
+            artist = artist.split(' X ')[0]
+            found_id = search_spotify(song_title, artist)
+            if found_id:
+                return get_audio_features(found_id)
+        # Check for 'x' character in artist name
+        if ' x ' in artist:
+            artist = artist.split(' x ')[0]
+            found_id = search_spotify(song_title, artist)
+            if found_id:
+                return get_audio_features(found_id)
+            
+        # Print song title and artist for non-match
+        if found_id:
+            return get_audio_features(found_id)
+        
+        return "No results found!"
+
+            # print(f"No ID found for '{song_title}' by {artist}")
+# Returns tuple of audio features from Spotify for specified track_id
+def get_audio_features(id):
+    try:
+        search_results = sp.audio_features(id)[0]
+        features_dict = {}
+
+        features_dict['danceability'] = search_results['danceability']
+        features_dict['energy'] = search_results['energy']
+        # key = search_results['key']
+        features_dict['loudness'] = search_results['loudness']
+        # mode = search_results['mode']
+        features_dict['speechiness'] = search_results['speechiness']
+        features_dict['acousticness'] = search_results['acousticness']
+        features_dict['instrumentalness'] = search_results['instrumentalness']
+        features_dict['liveness'] = search_results['liveness']
+        features_dict['valence'] = search_results['valence']
+        features_dict['tempo'] = search_results['tempo']
+        features_dict['duration_ms'] = search_results['duration_ms']
+    except:
+        return "No results"
+    
+    return features_dict
 
 
 if __name__ == '__main__':
