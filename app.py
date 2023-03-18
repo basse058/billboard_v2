@@ -68,7 +68,7 @@ def data(decade):
                             bbaf.loudness, bbaf.speechiness, bbaf.acousticness, bbaf.instrumentalness, 
                             bbaf.liveness, bbaf.valence, bbaf.tempo, bbaf.duration_ms, bbaf.billboard, 
                             bbaf.decade, bbaf.id).\
-                            filter_by("decade"==decade).\
+                            filter(bbaf.decade==decade).\
                             all()
 
     session.close()
