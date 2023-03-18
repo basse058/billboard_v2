@@ -11,8 +11,6 @@ from flask_cors import CORS, cross_origin
 
 # Glen dependencies
 import joblib
-from sklearn.svm import SVC 
-import pickle
 # Import dependencies for Spotipy
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials

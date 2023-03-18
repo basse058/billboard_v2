@@ -17,5 +17,4 @@ Werkzeug
 wincertstore
 flask_cors
 joblib
-pickle
 spotipy
