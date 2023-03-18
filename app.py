@@ -94,7 +94,6 @@ def data(decade):
         features_dict["decade"] = decade
         features_dict["id"] = id
         all_features.append(features_dict)
-
     return jsonify(all_features)
 
 @app.route("/use_model/<song>/<artist>/<decade>")

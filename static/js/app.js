@@ -125,12 +125,15 @@ const decadeInput = document.querySelector('#decade');
 
 decadeInput.addEventListener('change', (e) => {
   decadeValue = decadeInput.value
+  // console.log("Decade:", decadeValue);
 
   // useModelURL = `/use_model/${songValue}/${artistValue}/${decadeValue}`
   decadeURL = `/api/v1.0/billboard_features/${decadeValue}`;
+  
   d3.json(decadeURL).then(function(data){
     decadeRawData = data;
-    console.log(decadeRawData)});
+    
+    console.log(data)});
 
   // decadeData = cleanData(rawDecadeData)
   // radarChart.data.datasets[1].data = decadeData;
