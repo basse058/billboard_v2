@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify, render_template, request
 
+
 import flask_cors
 from flask_cors import CORS, cross_origin
 
@@ -39,6 +40,12 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+
+# SPOTIFY API
+# Create objects for accessing Spotify API
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
 #################################################
 # Flask Routes
 #################################################
@@ -49,15 +56,20 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def index():
     return render_template('index.html')
 
-
-@app.route("/api/v1.0/billboard_features")
-def data():
+@app.route("/api/v1.0/billboard_features/<decade>")
+def data(decade):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(bbaf.song, bbaf.artist, bbaf.release_year, bbaf.peak_rank, bbaf.weeks_on_board, bbaf.track_id, bbaf.danceability, bbaf.energy, bbaf.loudness, bbaf.speechiness, bbaf.acousticness, bbaf.instrumentalness, bbaf.liveness, bbaf.valence, bbaf.tempo, bbaf.duration_ms, bbaf.billboard, bbaf.decade, bbaf.id).all()
+    results = session.query(bbaf.song, bbaf.artist, bbaf.release_year, bbaf.peak_rank, 
+                            bbaf.weeks_on_board, bbaf.track_id, bbaf.danceability, bbaf.energy, 
+                            bbaf.loudness, bbaf.speechiness, bbaf.acousticness, bbaf.instrumentalness, 
+                            bbaf.liveness, bbaf.valence, bbaf.tempo, bbaf.duration_ms, bbaf.billboard, 
+                            bbaf.decade, bbaf.id).\
+                            filter_by("decade"==decade).\
+                            all()
 
     session.close()
 
@@ -89,7 +101,6 @@ def data():
         all_features.append(features_dict)
 
     return jsonify(all_features)
-
 
 @app.route("/use_model/<song>/<artist>/<decade>")
 def predict_track(song, artist, decade):
@@ -139,11 +150,6 @@ def predict_track(song, artist, decade):
     prediction_dict = {'Billboard': billboard_prob, 'Noncharting': noncharting_prob}
 
     return prediction_dict
-
-# SPOTIFY API
-# Create objects for accessing Spotify API
-client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def search_spotify(song_title, artist):
     try:
