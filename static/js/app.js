@@ -3,7 +3,6 @@ let searchSpotifyData = {};
 let decadeValue = null;
 let songValue = null;
 let artistValue = null;
-let decadeRawData = null;
 
 // defining a dummy json output when we search a song or click for a decade
 let calledFeatures = {
@@ -76,13 +75,13 @@ let decadeFeatures = [
 function cleanData(featureData){
   let cleanFeatureData = [];
   for (let k in songFeatures) {
-  for (let j in featureData){
-    if (j == songFeatures[k]) {
-      cleanFeatureData.push(featureData[j])
+    for (let j in featureData){
+      if (j == songFeatures[k]) {
+        cleanFeatureData.push(featureData[j])
+      };
     };
   };
-};
-return cleanFeatureData
+  return cleanFeatureData
 };
 
 // creating dummy listening event for when a user searches for a song
@@ -106,7 +105,7 @@ buttonSubmit.addEventListener("click", (event) => {
       return
     }
     else {
-      songUrl = `https://billboard-predictor.onrender.com/search_spotify/${songValue}/${artistValue}`
+      songUrl = `/search_spotify/${songValue}/${artistValue}`
 
       d3.json(songUrl).then(function(data){
         searchSpotifyData = data;
@@ -127,8 +126,8 @@ const decadeInput = document.querySelector('#decade');
 decadeInput.addEventListener('change', (e) => {
   decadeValue = decadeInput.value
 
-  // decadeURL = `https://billboard-predictor.onrender.com/use_model/${songValue}/${artistValue}/${decadeValue}`
-  decadeURL = `https://billboard-predictor.onrender.com/api/v1.0/billboard_features/${decadeValue}`
+  // useModelURL = `/use_model/${songValue}/${artistValue}/${decadeValue}`
+  decadeURL = `/api/v1.0/billboard_features/${decadeValue}`;
   d3.json(decadeURL).then(function(data){
     decadeRawData = data;
     console.log(useModelData)});
