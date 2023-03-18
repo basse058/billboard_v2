@@ -4,18 +4,43 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+<<<<<<< HEAD
 from config import key
 from flask import Flask, jsonify, render_template
 
 # import flask_cors
 # from flask_cors import CORS, cross_origin
+=======
+
+from flask import Flask, jsonify, render_template
+
+import flask_cors
+from flask_cors import CORS, cross_origin
+
+
+# Glen dependencies
+import joblib
+from sklearn.svm import SVC 
+import pickle
+# Import dependencies for Spotipy
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+# Import Client ID and Client Secret
+from config import cid, secret
+
+>>>>>>> glenbranch
 
 
 #################################################
 # Database Setup
 #################################################
+<<<<<<< HEAD
 engine = create_engine("postgresql://postgres:" + key + "@billboard-db.c4q3joupwllm.us-east-1.rds.amazonaws.com:5432/project-4")
 #engine = create_engine("sqlite:///billboard.sqlite")
+=======
+engine = create_engine("sqlite:///billboard.sqlite")
+
+>>>>>>> glenbranch
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
@@ -63,21 +88,22 @@ def data():
 
     # Create a dictionary from the row data and append to a list of all_passengers
     all_features = []
-    for song, artist, year, peak_rank, weeks, track_id, danceability, energy, music_key, loudness, mode, speechiness, instrumentalness, liveness, valence, tempo, duration, signature, billboard, decade, id in results:
+    for song, artist, year, peak_rank, weeks_on_board, track_id, danceability, energy, key, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, tempo, duration_ms, time_signature, billboard, decade in results:
         features_dict = {}
 
         features_dict["song"] = song
         features_dict["artist"] = artist
-        features_dict["release_year"] = year
+        features_dict["year"] = year
         features_dict["peak_rank"] = peak_rank
-        features_dict["weeks_on_board"] = weeks
+        features_dict["weeks_on_board"] = weeks_on_board
         features_dict["track_id"] = track_id
         features_dict["danceability"] = danceability
         features_dict["energy"] = energy
-        features_dict["music_key"] = music_key
+        features_dict["key"] = key
         features_dict["loudness"] = loudness
-        features_dict["music_mode"] = mode
+        features_dict["mode"] = mode
         features_dict["speechiness"] = speechiness
+        features_dict["acousticness"] = acousticness
         features_dict["instrumentalness"] = instrumentalness
         features_dict["liveness"] = liveness
         features_dict["valence"] = valence
@@ -90,6 +116,58 @@ def data():
         all_features.append(features_dict)
 
     return jsonify(all_features)
+
+
+@app.route("/use_model/<feature:track_features>&<decade:decade")
+def predict_track(track_features, decade):
+    if not 'track_features' in request.args:
+        return "Track features are missing"
+    if not 'decade' in request.args:
+        return "Select a decade"
+    
+    file_path = "./ML_models/"
+    model_names = {"1960s": "model_1960s",
+                "1970s": "model_1970s",
+                "1980s": "model_1980s",
+                "1990s": "model_1990s",
+                "2000s": "model_2000s",
+                "2010s": "model_1970s"}
+    
+    scaler_names = {"1960s": "scaler_1960s",
+                "1970s": "scaler_1970s",
+                "1980s": "scaler_1980s",
+                "1990s": "scaler_1990s",
+                "2000s": "scaler_2000s",
+                "2010s": "scaler_2010s"}
+
+    # load model
+    loaded_model = joblib.load(f"{file_path}{model_names[decade]}")
+    loaded_scaler = joblib.load(f"{file_path}{scaler_names[decade]}")
+
+    scaled_features = loaded_scaler.transform(track_features)
+
+    # you can use loaded model to compute predictions
+    y_predict = loaded_model.predict(scaled_features)
+    y_pred_proba = loaded_model.predict_proba(scaled_features)
+
+    if y_predict[0] == 1:
+        billboard_prob = round(y_pred_proba[0][0], 3) * 100
+        noncharting_prob = round(y_pred_proba[0][1],3) * 100
+    else:
+        billboard_prob = round(y_pred_proba[0][1], 3) * 100
+        noncharting_prob = round(y_pred_proba[0][0],3) * 100
+
+    return billboard_prob, noncharting_prob
+
+# SPOTIFY API
+# Create objects for accessing Spotify API
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+
+
+
+
 
 
 if __name__ == '__main__':
