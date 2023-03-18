@@ -52,19 +52,6 @@ let songFeatures = [
   'liveness'
 ]
 
-const clientID = "6b07ed63b9284ebb97bad5d40f6a4c61";
-const clientSecret = "39a4fd794c48415daa2e8b77b6a501d3";
-
-// function App() {
-//   const [searchIng, setSearchInput] = useState("")
-
-//   useEffect(() => {
-
-//   }
-//   )
-// }
-
-const spotifyURL = "http://127.0.0.1:5000/api/v1.0/billboard_features"
 
 // function to clean data, assuming it will be aiight
 function cleanData(featureData){
@@ -100,36 +87,20 @@ buttonSubmit.addEventListener("click", (event) => {
       return
     }
     else {
-      console.log(songValue)
-      console.log(artistValue)
-    }
+      url = `${window.origin}/search_spotify/${songValue}/${artistValue}`
+      fetch (url)
+      // d3.json(url).then(function(data){
+      //   console.log(data)
+      // })
 
     }
-
+  }
     // songData = cleanData(rawSongData)
     // radarChart.data.datasets[0].data = songData;
     // radarChart.update();
     // console.log(songData)
 );
 
-
-
-// searchInput.addEventListener("keydown", (e) => {
-//   if (e.key === 'Enter') {
-//     if (!e.currentTarget.value)
-//       console.log('cleared');
-//     else
-//     rawSongData = calledFeatures
-//     songData = cleanData(rawSongData)
-//     radarChart.data.datasets[0].data = songData;
-//     radarChart.update();
-//     console.log(songData)
-//   }
-// });
-// searchInput.addEventListener('input', (e) => {
-//   if (!e.currentTarget.value)
-//     console.log('cleared');
-// });
 
 // adding dummy dropdown listener event
 const decadeInput = document.querySelector('#decade');
@@ -181,14 +152,13 @@ function createChart(initialDecade){
     type: 'radar',
     data: data,
     options: {
-      responsive: true,
       elements: {
         line: {
           borderWidth: 3
         }
       }
-    }
-  }
+    },
+  };
   //var radarChart = new Chart(canvasElement, config);
   var radarChart = new Chart(canvasElement, config);
   return radarChart
