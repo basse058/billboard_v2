@@ -52,17 +52,6 @@ let songFeatures = [
   'liveness'
 ]
 
-const clientID = "6b07ed63b9284ebb97bad5d40f6a4c61";
-const clientSecret = "39a4fd794c48415daa2e8b77b6a501d3";
-
-// function App() {
-//   const [searchIng, setSearchInput] = useState("")
-
-//   useEffect(() => {
-
-//   }
-//   )
-// }
 
 // function to clean data, assuming it will be aiight
 function cleanData(featureData){
@@ -79,27 +68,42 @@ return cleanFeatureData
 
 // creating dummy listening event for when a user searches for a song
 let typedSong = ""
-const searchInput = document.querySelector('#search');
+const songInput = document.querySelector('#search-song');
+const artistInput = document.querySelector('#search-artist');
+const buttonSubmit = document.querySelector('#submit');
 
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === 'Enter') {
-    if (!e.currentTarget.value)
-      console.log('cleared');
-    else
-    rawSongData = calledFeatures
-    songData = cleanData(rawSongData)
-    radarChart.data.datasets[0].data = songData;
-    radarChart.update();
-    console.log(songData)
+//put on button instead of search
+// call in the pre-created bars into the event listener
+buttonSubmit.addEventListener("click", (event) => {
+    // if song box is empty, return 'you need to fill this in
+    // if artist box is empty, return 'you need to fill this in too'
+    // else, return song name, artist name 
+
+    songValue = songInput.value
+    artistValue = artistInput.value
+
+    if (!songValue || !artistValue) {
+      console.log('missing value')
+      return
+    }
+    else {
+      url = `${window.origin}/search_spotify/${songValue}/${artistValue}`
+      fetch (url)
+      // d3.json(url).then(function(data){
+      //   console.log(data)
+      // })
+
+    }
   }
-});
-searchInput.addEventListener('input', (e) => {
-  if (!e.currentTarget.value)
-    console.log('cleared');
-});
+    // songData = cleanData(rawSongData)
+    // radarChart.data.datasets[0].data = songData;
+    // radarChart.update();
+    // console.log(songData)
+);
+
 
 // adding dummy dropdown listener event
-const decadeInput = document.querySelector('#greet');
+const decadeInput = document.querySelector('#decade');
 
 decadeInput.addEventListener('change', (e) => {
   rawDecadeData = decadeRawData
