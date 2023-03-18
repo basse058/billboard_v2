@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify, render_template, request
 
-import flask_cors
-from flask_cors import CORS, cross_origin
+# import flask_cors
+# from flask_cors import CORS, cross_origin
 
 # Glen dependencies
 import joblib
@@ -36,15 +36,15 @@ bbaf = Base.classes.data_table
 # Flask Setup
 #################################################
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+# cors = CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 #################################################
 # Flask Routes
 #################################################
 
 @app.route("/")
-@cross_origin()
+# @cross_origin()
 
 def index():
     return render_template('index.html')
@@ -98,13 +98,23 @@ def data():
     return jsonify(all_features)
 
 
-@app.route("/use_model/<track_features>/<decade>")
-def predict_track(track_features, decade):
-    if not 'track_features' in request.args:
-        return "Track features are missing"
-    if not 'decade' in request.args:
-        return "Select a decade"
-    
+@app.route("/use_model/<song>/<artist>/<decade>")
+def predict_track(song, artist, decade):
+    track_features_dict = get_track_features(song, artist)
+    if type(track_features_dict) == dict:
+        feature_list = []
+        feature_list.append(track_features_dict['danceability'])
+        feature_list.append(track_features_dict['energy'])
+        feature_list.append(track_features_dict['loudness'])
+        feature_list.append(track_features_dict['speechiness'])
+        feature_list.append(track_features_dict['acousticness'])
+        feature_list.append(track_features_dict['instrumentalness'])
+        feature_list.append(track_features_dict['liveness'])
+        feature_list.append(track_features_dict['valence'])
+        feature_list.append(track_features_dict['tempo'])
+        feature_list.append(track_features_dict['duration_ms'])
+        feature_list = [feature_list]
+    print(feature_list)
     file_path = "./ML_models/"
     model_names = {"1960s": "model_1960s",
                 "1970s": "model_1970s",
@@ -124,20 +134,18 @@ def predict_track(track_features, decade):
     loaded_model = joblib.load(f"{file_path}{model_names[decade]}")
     loaded_scaler = joblib.load(f"{file_path}{scaler_names[decade]}")
 
-    scaled_features = loaded_scaler.transform(track_features)
+    scaled_features = loaded_scaler.transform(feature_list)
 
     # you can use loaded model to compute predictions
     y_predict = loaded_model.predict(scaled_features)
     y_pred_proba = loaded_model.predict_proba(scaled_features)
 
-    if y_predict[0] == 1:
-        billboard_prob = round(y_pred_proba[0][0], 3) * 100
-        noncharting_prob = round(y_pred_proba[0][1],3) * 100
-    else:
-        billboard_prob = round(y_pred_proba[0][1], 3) * 100
-        noncharting_prob = round(y_pred_proba[0][0],3) * 100
 
-    return billboard_prob, noncharting_prob
+    noncharting_prob = round(y_pred_proba[0][0], 3) * 100
+    billboard_prob = round(y_pred_proba[0][1],3) * 100
+    prediction_dict = {'Billboard': billboard_prob, 'Noncharting': noncharting_prob}
+
+    return prediction_dict
 
 # SPOTIFY API
 # Create objects for accessing Spotify API
@@ -264,9 +272,7 @@ def get_audio_features(id):
 
         features_dict['danceability'] = search_results['danceability']
         features_dict['energy'] = search_results['energy']
-        # key = search_results['key']
         features_dict['loudness'] = search_results['loudness']
-        # mode = search_results['mode']
         features_dict['speechiness'] = search_results['speechiness']
         features_dict['acousticness'] = search_results['acousticness']
         features_dict['instrumentalness'] = search_results['instrumentalness']
@@ -279,6 +285,5 @@ def get_audio_features(id):
     
     return features_dict
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5001, debug=True)

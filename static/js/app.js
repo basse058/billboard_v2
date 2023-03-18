@@ -85,6 +85,9 @@ const songInput = document.querySelector('#search-song');
 const artistInput = document.querySelector('#search-artist');
 const buttonSubmit = document.querySelector('#submit');
 
+let songValue = ''
+let artistValue = ''
+
 //put on button instead of search
 // call in the pre-created bars into the event listener
 buttonSubmit.addEventListener("click", (event) => {
@@ -106,7 +109,7 @@ buttonSubmit.addEventListener("click", (event) => {
       })
 
     }
-    return data 
+    return data
   }
     // songData = cleanData(rawSongData)
     // radarChart.data.datasets[0].data = songData;
@@ -120,14 +123,12 @@ const decadeInput = document.querySelector('#decade');
 
 decadeInput.addEventListener('change', (e) => {
   decadeValue = decadeInput.value
-  const parameterizeArray = (key, arr) => {
-    arr = arr.map(encodeURIComponent)
-    return '?'+key+'[]=' + arr.join('&'+key+'[]=')
-  }
-  results = parameterizeArray('features',songFeatures)
-  decadeURL = `https://billboard-predictor.onrender.com/search_spotify/use_model/${songFeatures}/${results}`
+
+  decadeURL = `https://billboard-predictor.onrender.com/use_model/${songValue}/${artistValue}/${decadeValue}`
   d3.json(decadeURL).then(function(decadeRawData){
     console.log(decadeRawData)});
+
+
   // decadeData = cleanData(rawDecadeData)
   // radarChart.data.datasets[1].data = decadeData;
   // radarChart.update();
