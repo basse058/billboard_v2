@@ -46,7 +46,8 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # Flask Routes
 #################################################
 
-@app.route("/")#@cross_origin()
+@app.route("/")
+@cross_origin()
 
 def index():
     return render_template('index.html')
