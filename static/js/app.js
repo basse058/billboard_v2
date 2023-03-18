@@ -1,3 +1,5 @@
+let useModelData = {};
+let searchSpotifyData = {};
 
 // defining a dummy json output when we search a song or click for a decade
 let calledFeatures = {
@@ -105,11 +107,10 @@ buttonSubmit.addEventListener("click", (event) => {
     else {
       songUrl = `https://billboard-predictor.onrender.com/search_spotify/${songValue}/${artistValue}`
       d3.json(songUrl).then(function(data){
-        console.log(data)
+        searchSpotifyData = data;
+        console.log(searchSpotifyData)
       })
-
     }
-    return data
   }
     // songData = cleanData(rawSongData)
     // radarChart.data.datasets[0].data = songData;
@@ -126,7 +127,8 @@ decadeInput.addEventListener('change', (e) => {
 
   decadeURL = `https://billboard-predictor.onrender.com/use_model/${songValue}/${artistValue}/${decadeValue}`
   d3.json(decadeURL).then(function(decadeRawData){
-    console.log(decadeRawData)});
+    useModelData = decadeRawData;
+    console.log(useModelData)});
 
 
   // decadeData = cleanData(rawDecadeData)
