@@ -4,7 +4,7 @@ Flask == 1.1.2
 Flask-SQLAlchemy
 Gunicorn
 itsdangerous
-Jinja2
+Jinja2 == 2.11.3
 MarkupSafe
 numpy
 pandas

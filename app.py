@@ -69,6 +69,7 @@ def data(decade):
                             bbaf.liveness, bbaf.valence, bbaf.tempo, bbaf.duration_ms, bbaf.billboard, 
                             bbaf.decade, bbaf.id).\
                             filter(bbaf.decade==decade).\
+                            filter(bbaf.billboard==1).\
                             all()
 
     session.close()
