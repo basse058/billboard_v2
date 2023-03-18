@@ -4,7 +4,6 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-from config import key
 from flask import Flask, jsonify, render_template, request
 
 import flask_cors
@@ -18,7 +17,7 @@ import pickle
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 # Import Client ID and Client Secret
-#from config import cid, secret, key
+
 from bobbles import cid, secret, key
 import re
 
