@@ -78,28 +78,42 @@ return cleanFeatureData
 };
 
 // creating dummy listening event for when a user searches for a song
-let typedSong = ""
-const searchInput = document.querySelector('#search');
+const songInput = document.querySelector('#search-song');
+const artistInput = document.querySelector('#search-artist');
+const buttonSubmit = document.querySelector('#submit');
 
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === 'Enter') {
-    if (!e.currentTarget.value)
-      console.log('cleared');
-    else
+
+// call in the pre-created bars into the event listener
+buttonSubmit.addEventListener("click", (e) => {
     rawSongData = calledFeatures
     songData = cleanData(rawSongData)
     radarChart.data.datasets[0].data = songData;
     radarChart.update();
     console.log(songData)
   }
-});
-searchInput.addEventListener('input', (e) => {
-  if (!e.currentTarget.value)
-    console.log('cleared');
-});
+);
+
+
+
+// searchInput.addEventListener("keydown", (e) => {
+//   if (e.key === 'Enter') {
+//     if (!e.currentTarget.value)
+//       console.log('cleared');
+//     else
+//     rawSongData = calledFeatures
+//     songData = cleanData(rawSongData)
+//     radarChart.data.datasets[0].data = songData;
+//     radarChart.update();
+//     console.log(songData)
+//   }
+// });
+// searchInput.addEventListener('input', (e) => {
+//   if (!e.currentTarget.value)
+//     console.log('cleared');
+// });
 
 // adding dummy dropdown listener event
-const decadeInput = document.querySelector('#greet');
+const decadeInput = document.querySelector('#decade');
 
 decadeInput.addEventListener('change', (e) => {
   rawDecadeData = decadeRawData
@@ -148,13 +162,14 @@ function createChart(initialDecade){
     type: 'radar',
     data: data,
     options: {
+      responsive: true,
       elements: {
         line: {
           borderWidth: 3
         }
       }
-    },
-  };
+    }
+  }
   //var radarChart = new Chart(canvasElement, config);
   var radarChart = new Chart(canvasElement, config);
   return radarChart
