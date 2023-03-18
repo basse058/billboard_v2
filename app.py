@@ -267,23 +267,23 @@ def get_audio_features(id):
     try:
         search_results = sp.audio_features(id)[0]
         features_dict = {}
-        danceability = search_results['danceability']
-        energy = search_results['energy']
+
+        features_dict['danceability'] = search_results['danceability']
+        features_dict['energy'] = search_results['energy']
         # key = search_results['key']
-        loudness = search_results['loudness']
+        features_dict['loudness'] = search_results['loudness']
         # mode = search_results['mode']
-        speechiness = search_results['speechiness']
-        acousticness = search_results['acousticness']
-        instrumentalness = search_results['instrumentalness']
-        liveness = search_results['liveness']
-        valence = search_results['valence']
-        tempo = search_results['tempo']
-        duration_ms = search_results['duration_ms']
-        # time_signature = search_results['time_signature']
+        features_dict['speechiness'] = search_results['speechiness']
+        features_dict['acousticness'] = search_results['acousticness']
+        features_dict['instrumentalness'] = search_results['instrumentalness']
+        features_dict['liveness'] = search_results['liveness']
+        features_dict['valence'] = search_results['valence']
+        features_dict['tempo'] = search_results['tempo']
+        features_dict['duration_ms'] = search_results['duration_ms']
     except:
         return "No results"
-
-    return search_results
+    
+    return features_dict
 
 
 if __name__ == '__main__':
