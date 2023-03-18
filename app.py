@@ -7,8 +7,8 @@ from sqlalchemy import create_engine, func
 from config import key
 from flask import Flask, jsonify, render_template
 
-import flask_cors
-from flask_cors import CORS, cross_origin
+# import flask_cors
+# from flask_cors import CORS, cross_origin
 
 
 #################################################
