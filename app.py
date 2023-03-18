@@ -49,13 +49,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def index():
     return render_template('index.html')
 
-def welcome():
-    """It worked! List all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"/api/v1.0/billboard_features"
-    )
-
 
 @app.route("/api/v1.0/billboard_features")
 def data():
