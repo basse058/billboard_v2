@@ -18,3 +18,4 @@ wincertstore
 flask_cors
 joblib
 spotipy
+scikit-learn == 1.0.2
