@@ -18,6 +18,7 @@ import pickle
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 # Import Client ID and Client Secret
+#from config import cid, secret, key
 from bobbles import cid, secret, key
 import re
 
