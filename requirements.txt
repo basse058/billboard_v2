@@ -1,6 +1,6 @@
 certifi
 Click
-Flask
+Flask == 1.1.2
 Flask-SQLAlchemy
 Gunicorn
 itsdangerous
@@ -8,11 +8,11 @@ Jinja2
 MarkupSafe
 numpy
 pandas
-psycopg2
+psycopg2 == 2.9.5
 python-dateutil
 pytz
 six
-SQLAlchemy
+SQLAlchemy == 1.4.39
 Werkzeug
 wincertstore
 flask_cors
