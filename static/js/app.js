@@ -130,7 +130,7 @@ decadeInput.addEventListener('change', (e) => {
   decadeURL = `/api/v1.0/billboard_features/${decadeValue}`;
   d3.json(decadeURL).then(function(data){
     decadeRawData = data;
-    console.log(useModelData)});
+    console.log(decadeRawData)});
 
   // decadeData = cleanData(rawDecadeData)
   // radarChart.data.datasets[1].data = decadeData;
