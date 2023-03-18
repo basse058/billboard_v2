@@ -64,6 +64,8 @@ const clientSecret = "39a4fd794c48415daa2e8b77b6a501d3";
 //   )
 // }
 
+const spotifyURL = "http://127.0.0.1:5000/api/v1.0/billboard_features"
+
 // function to clean data, assuming it will be aiight
 function cleanData(featureData){
   let cleanFeatureData = [];
@@ -78,19 +80,36 @@ return cleanFeatureData
 };
 
 // creating dummy listening event for when a user searches for a song
+let typedSong = ""
 const songInput = document.querySelector('#search-song');
 const artistInput = document.querySelector('#search-artist');
 const buttonSubmit = document.querySelector('#submit');
 
-
+//put on button instead of search
 // call in the pre-created bars into the event listener
-buttonSubmit.addEventListener("click", (e) => {
-    rawSongData = calledFeatures
-    songData = cleanData(rawSongData)
-    radarChart.data.datasets[0].data = songData;
-    radarChart.update();
-    console.log(songData)
-  }
+buttonSubmit.addEventListener("click", (event) => {
+    // if song box is empty, return 'you need to fill this in
+    // if artist box is empty, return 'you need to fill this in too'
+    // else, return song name, artist name 
+
+    songValue = songInput.value
+    artistValue = artistInput.value
+
+    if (!songValue || !artistValue) {
+      console.log('missing value')
+      return
+    }
+    else {
+      console.log(songValue)
+      console.log(artistValue)
+    }
+
+    }
+
+    // songData = cleanData(rawSongData)
+    // radarChart.data.datasets[0].data = songData;
+    // radarChart.update();
+    // console.log(songData)
 );
 
 
