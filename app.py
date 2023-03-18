@@ -4,7 +4,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-
+from config import key
 from flask import Flask, jsonify, render_template
 
 import flask_cors
@@ -14,7 +14,7 @@ from flask_cors import CORS, cross_origin
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("postgresql://postgres:testpass@billboard-db.c4q3joupwllm.us-east-1.rds.amazonaws.com:5432/project-4")
+engine = create_engine("postgresql://postgres:" + key + "@billboard-db.c4q3joupwllm.us-east-1.rds.amazonaws.com:5432/project-4")
 #engine = create_engine("sqlite:///billboard.sqlite")
 # reflect an existing database into a new model
 Base = automap_base()
