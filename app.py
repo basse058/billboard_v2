@@ -7,8 +7,8 @@ from sqlalchemy import create_engine, func
 from config import key
 from flask import Flask, jsonify, render_template, request
 
-# import flask_cors
-# from flask_cors import CORS, cross_origin
+import flask_cors
+from flask_cors import CORS, cross_origin
 
 # Glen dependencies
 import joblib
@@ -38,18 +38,17 @@ bbaf = Base.classes.data_table
 # Flask Setup
 #################################################
 app = Flask(__name__)
-#cors = CORS(app)
-#app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 #################################################
 # Flask Routes
 #################################################
 
-@app.route("/")
-#@cross_origin()
+@app.route("/")#@cross_origin()
 
-#def index():
-#    return render_template('index.html')
+def index():
+    return render_template('index.html')
 
 def welcome():
     """It worked! List all available api routes."""
