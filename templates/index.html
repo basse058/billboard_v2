@@ -19,47 +19,49 @@
   </head>
   
   <body>
-    <div class="wrapper">
-      <div class="title_name">
-        <h1>Hit Song Predictor</h1>
-        <h6>An exploration of Spotify's audio features for all weekly Billboard charting songs throughout the decades.</h6>
-      </div>
-  
-      <div class="search_lines" >
-          <h7 class="panel-title">Enter a song/artist and select a decade to see if it would be a hit during that time period!</h7>
-        <div id="enter-info" class="panel-body">
-          <div >
-            <input type= "search" id= "search-song" label="Song" placeholder="Song" >
-          </div>
-          <div">
-            <input type= "search" id= "search-artist" label="Artist" placeholder="Artist">
-          </div>
-          <div>
-              <button class="btn btn-primary" type="submit" id=submit name="submit">Submit</button>
-          </div>
-  
+    <div class="container">
+      <div class="wrapper">
+        <div class="title_name">
+          <h1>Hit Song Predictor</h1>
+          <h6>An exploration of Spotify's audio features for all weekly Billboard charting songs throughout the decades.</h6>
+        </div>
+    
+        <div class="search_lines" >
+            <h7 class="panel-title">Enter a song/artist and select a decade to see if it would be a hit during that time period!</h7>
+          <div id="enter-info" class="panel-body">
+            <div >
+              <input type= "search" id= "search-song" label="Song" placeholder="Song" >
+            </div>
+            <div">
+              <input type= "search" id= "search-artist" label="Artist" placeholder="Artist">
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit" id=submit name="submit">Submit</button>
+            </div>
+    
 
-          <div>
-            <select id="decade">
-              <option value="1960s">1960s</option>
-              <option value="1970s">1970s</option>
-              <option value="1980s">1980s</option>
-              <option value="1990s">1990s</option>
-              <option value="2000s">2000s</option>
-              <option value="2010s">2010s</option>
-            </select>
+            <div>
+              <select id="decade">
+                <option value="1960s">1960s</option>
+                <option value="1970s">1970s</option>
+                <option value="1980s">1980s</option>
+                <option value="1990s">1990s</option>
+                <option value="2000s">2000s</option>
+                <option value="2010s">2010s</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="chart-container">
-        <canvas id="radar-compare"></canvas>
-      </div>
+        <div class="chart-container">
+          <canvas id="radar-compare"></canvas>
+        </div>
 
-    </div>    
+      </div>    
     
-    <div class="row"> 
-      <canvas id="featuresChart"></canvas>
-    </div>
+      <div class="row"> 
+        <canvas id="featuresChart"></canvas>
+      </div>
+  </div>
   </body>
 </html>
