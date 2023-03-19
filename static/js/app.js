@@ -1,8 +1,3 @@
-let useModelData = {};
-let searchSpotifyData = {};
-let decadeValue = null;
-let songValue = null;
-let artistValue = null;
 
 // defining a dummy json output when we search a song or click for a decade
 let calledFeatures = {
@@ -57,31 +52,18 @@ let songFeatures = [
   'liveness'
 ]
 
-let decadeFeatures = [
-  'danceability',
-  'energy',
-  'loudness',
-  'speechiness',
-  'acousticness',
-  'instrumentalness',
-  'liveness',
-  'valence',
-  'tempo',
-  'duration_ms'
-]
-
 
 // function to clean data, assuming it will be aiight
 function cleanData(featureData){
   let cleanFeatureData = [];
   for (let k in songFeatures) {
-    for (let j in featureData){
-      if (j == songFeatures[k]) {
-        cleanFeatureData.push(featureData[j])
-      };
+  for (let j in featureData){
+    if (j == songFeatures[k]) {
+      cleanFeatureData.push(featureData[j])
     };
   };
-  return cleanFeatureData
+};
+return cleanFeatureData
 };
 
 // creating dummy listening event for when a user searches for a song
@@ -105,12 +87,12 @@ buttonSubmit.addEventListener("click", (event) => {
       return
     }
     else {
-      songUrl = `/search_spotify/${songValue}/${artistValue}`
+      url = `${window.origin}/search_spotify/${songValue}/${artistValue}`
+      fetch (url)
+      // d3.json(url).then(function(data){
+      //   console.log(data)
+      // })
 
-      d3.json(songUrl).then(function(data){
-        searchSpotifyData = data;
-        console.log(searchSpotifyData)
-      })
     }
   }
     // songData = cleanData(rawSongData)
@@ -124,21 +106,11 @@ buttonSubmit.addEventListener("click", (event) => {
 const decadeInput = document.querySelector('#decade');
 
 decadeInput.addEventListener('change', (e) => {
-  decadeValue = decadeInput.value
-  // console.log("Decade:", decadeValue);
-
-  // useModelURL = `/use_model/${songValue}/${artistValue}/${decadeValue}`
-  decadeURL = `/api/v1.0/billboard_features/${decadeValue}`;
-  
-  d3.json(decadeURL).then(function(data){
-    decadeRawData = data;
-    
-    console.log(data)});
-
-  // decadeData = cleanData(rawDecadeData)
-  // radarChart.data.datasets[1].data = decadeData;
-  // radarChart.update();
-  // console.log(decadeInput.value)
+  rawDecadeData = decadeRawData
+  decadeData = cleanData(rawDecadeData)
+  radarChart.data.datasets[1].data = decadeData;
+  radarChart.update();
+  console.log(decadeData)
 
 });
 
