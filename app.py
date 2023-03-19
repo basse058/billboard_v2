@@ -261,23 +261,23 @@ def get_track_features(song_title, artist):
             # print(f"No ID found for '{song_title}' by {artist}")
 # Returns tuple of audio features from Spotify for specified track_id
 def get_audio_features(id):
+    features_list = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 
+                   'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms']
     try:
         search_results = sp.audio_features(id)[0]
-        features_dict = {}
+        scaled_features = []
 
-        features_dict['danceability'] = search_results['danceability']
-        features_dict['energy'] = search_results['energy']
-        features_dict['loudness'] = search_results['loudness']
-        features_dict['speechiness'] = search_results['speechiness']
-        features_dict['acousticness'] = search_results['acousticness']
-        features_dict['instrumentalness'] = search_results['instrumentalness']
-        features_dict['liveness'] = search_results['liveness']
-        features_dict['valence'] = search_results['valence']
-        features_dict['tempo'] = search_results['tempo']
-        features_dict['duration_ms'] = search_results['duration_ms']
+        for k,v in search_results:
+            if k in features_list:
+                scaled_features.append(v)
     except:
         return "No results"
     
+    audio_feature_scaler = joblib.load("./Resources/audio_feature_scaler.pickle")
+    audio_feature_scaler.transform([scaled_features])
+
+    features_dict = {features_list[i]:scaled_features[i] for i in range(len(features_list))}
+
     return features_dict
 
 if __name__ == '__main__':
