@@ -284,6 +284,7 @@ def get_audio_features(id):
         scaled_features_dict = {features_list[i]:scaled_features[i] for i in range(len(features_list))}
         # Return dictionary with scaled features
         return scaled_features_dict
+    # Return none
     return
 
 if __name__ == '__main__':
