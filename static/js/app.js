@@ -112,6 +112,8 @@ buttonSubmit.addEventListener("click", (event) => {
         console.log(searchSpotifyData)
       })
     }
+
+    d3.select("#state-school-count").text(`${schoolCount} schools in ${state}`);
   }
     // songData = cleanData(rawSongData)
     // radarChart.data.datasets[0].data = songData;

@@ -20,93 +20,64 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-12 jumbotron jumbotron text-center mt-4 pt-1 bg-secondary text-white rounded">
+      <div class="col-md-12 jumbotron jumbotron text-center mt-4 pt-1 rounded">
         <h1>Billboard Top 100: Audio Features by the Decades</h1>
-        <h6>An exploration of Spotify's audio features for all weekly Billboard charting songs since 1960.</h6>
+        <h6>An exploration of Spotify's audio features for all weekly Billboard charting songs throughout the decades.</h6>
       </div>
     </div>
 
-    <div class="row metadata-row">
-      <div class="map-data-section col-md-6 h-100 align-items-center justify-content-center">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h5 class="panel-title">Enter a song.</h5>
-            </div>
-            <div id="sample-metadata" class="panel-body">
-              <p id="state-school-count"></p>
-              <p id="county-school-count"></p>
-              <p id="walkability-score"> </p>
-              <p id="student-pop"> </p>
-              <p id="total-pop"> </p>
-            </div>
+    <div class="row">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h7 class="panel-title">Enter a song/artist and select a decade!.</h7>
+        </div>
+        <div id="enter-info" class="panel-body">
+          <div >
+            <label>Song: </label>
+            <input type= "search" id= "search-song" label="Song">
           </div>
-          <div id="map-container-fluid">
-            <div id="map-frame">
-              <div id="map"></div>
-            </div>
+          <div">
+            <label>Artist: </label>
+            <input type= "search" id= "search-artist" label="Artist">
           </div>
-      </div>
+          <div>
+            <button class="btn btn-primary" type="submit" id=submit name="submit">Submit</button>
+          </div>
 
-      <div class="chart-container col-md-6">
-          <div class="bar-frame">
-            <canvas id="bar-chart"></canvas>
+          <div>
+            <select id="decade">
+              <option value="1960s">1960s</option>
+              <option value="1970s">1970s</option>
+              <option value="1980s">1980s</option>
+              <option value="1990s">1990s</option>
+              <option value="2000s">2000s</option>
+              <option value="2010s">2010s</option>
+            </select>
           </div>
-          <div class="scatter-frame">
-            <canvas id="scatter-plot"></canvas>
-          </div>
-      </div>
-    </div>
-
-    <!-- <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="description text-center">
-          <p class="description-info">The national median walkability index by county is 6.30.
-            The county averages range from 1 to 15.96.<br>
-            We defined the walkability index ranges based on the following values and percentiles of the county average walkability index:<br>
-            <strong>Least walkable:</strong> 0-4.48 (0-10%) <br>
-            <strong>Below average:</strong> 4.48-5.56 (10-35%)<br>
-            <strong>Average walkability:</strong> 5.56-6.53 (35-65%)<br>
-            <strong>Above Average:</strong> 6.53-9.10 (65-90%)<br>
-            <strong>Most walkable:</strong> 9.10-20 (90-100%)
-          </p>
         </div>
       </div>
-      <div class="col-md-1"></div>
-    </div> -->
+
+      <div class="chart-container">
+        <canvas id="radar-compare"></canvas>
+      </div>
+    </div>    
+    
+    <div class="row"> 
+      <canvas id="featuresChart"></canvas>
+    </div>
+  </div>
 
   <body>
-    <!-- Search form -->
-    <div>
-      <input type= search id= search-song>
-    </div>
-    <div>
-      <input type= search id= search-artist>
-    </div>
-    <div>
-      <button class="btn btn-primary" type="submit" id=submit name="submit">Submit</button>
+
+      
     </div>
 
 <!-- ----------------------------------------- -->
 
-      <select id="decade">
-        <option value="1960s">1960s</option>
-        <option value="1970s">1970s</option>
-        <option value="1980s">1980s</option>
-        <option value="1990s">1990s</option>
-        <option value="2000s">2000s</option>
-        <option value="2010s">2010s</option>
-      </select>
+      
     </div>
 
-    <div class="container">
-      <div class="row">
-        <canvas id="radar-compare"></canvas>
-      </div>
-      <div class="row">
-        <canvas id="featuresChart"></canvas>
-      </div>
-    </div>
+    
 
 
     <!-- Linking JS to Bootstrap and all -->
