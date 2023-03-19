@@ -11,13 +11,6 @@ let valence = featuresByYear['valence'];
 let tempo = featuresByYear['tempo'];
 let duration_ms = featuresByYear['duration_ms'];
 
-// 'danceability',
-//   'energy',
-//   'loudness',
-//   'speechiness',
-//   'acousticness',
-//   'liveness'
-
 let featuresCanvas = document.getElementById("featuresChart");
 
 let danceabilityData = {
