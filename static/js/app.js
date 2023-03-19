@@ -149,12 +149,12 @@ s.options[i-1].selected = true;
 return;
 }
 
-function createChart(initialDecade){
+function createChart(){
   const data = {
     labels: songFeatures,
     datasets: [{
       label: 'songs',
-      data: [1,2,3,4,5,6],
+      data: initialSong(),
       fill: true,
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgb(255, 99, 132)',
@@ -253,9 +253,24 @@ var config = {
 var radarChart = new Chart(canvasElement, config);
 
 
-// function chartCreate (decadeInit){
-  
-// }
+function intitalSong(){
+  let starterSong = 'Hello';
+  let starterArtist = 'Adele';
+  let starterSongURL = `/search_spotify/${starterSong}/${starterArtist}`
+  d3.json(starterSongURL).then(function(data){
+    let starterSongRawData = {}
+    starterSongRawData = data;
+    let starterSongData = []
+    starterSongData = cleanData(starterSongRawData);
+})
+};
+
+function initialDecade(){
+  let starterDecade = '1970s';
+  decadeRawData = starterDecade[groupedDecades];
+  let decadeData = cleanData(rawDecadeData);
+  console.log(decadeData)
+}
 
 //13 features selection box selection
 
