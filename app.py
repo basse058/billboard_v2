@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -259,26 +259,32 @@ def get_track_features(song_title, artist):
         return "No results found!"
 
             # print(f"No ID found for '{song_title}' by {artist}")
-# Returns tuple of audio features from Spotify for specified track_id
+
+# Returns dictionary of scaled audio features from Spotify for specified track_id
 def get_audio_features(id):
+    # Create list of desired audio features
     features_list = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 
                    'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms']
-    try:
-        search_results = sp.audio_features(id)[0]
-        scaled_features = []
+    # Make call to spotify API by ID to return dictionary of audio features
+    search_results = sp.audio_features(id)[0]
+    # Check if search returned anything
+    if search_results:
+        # Create list of values for features in features_list
+        features = [v for k,v in search_results.items() if k in features_list]
+        # Create dictionary for returned audio features
+        features_dict = {features_list[i]:features[i] for i in range(len(features_list))}
+        # Create dataframe from dictionary to apply scaler
+        feat_df = pd.DataFrame(features_dict, index=[0])
+        # Load in saved scaler
+        audio_feature_scaler = joblib.load("./Resources/audio_feature_scaler.pickle")
+        # Transform audio features in dataframe into array
+        scaled_features = audio_feature_scaler.transform(feat_df)[0]
 
-        for k,v in search_results:
-            if k in features_list:
-                scaled_features.append(v)
-    except:
-        return "No results"
-    
-    audio_feature_scaler = joblib.load("./Resources/audio_feature_scaler.pickle")
-    scaled_features = audio_feature_scaler.transform([scaled_features])[0]
-
-    features_dict = {features_list[i]:scaled_features[i] for i in range(len(features_list))}
-
-    return features_dict
+        # Create new dictionary with scaled features
+        scaled_features_dict = {features_list[i]:scaled_features[i] for i in range(len(features_list))}
+        # Return dictionary with scaled features
+        return scaled_features_dict
+    return
 
 if __name__ == '__main__':
     app.run(debug=True)
