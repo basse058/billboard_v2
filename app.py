@@ -274,7 +274,7 @@ def get_audio_features(id):
         return "No results"
     
     audio_feature_scaler = joblib.load("./Resources/audio_feature_scaler.pickle")
-    audio_feature_scaler.transform([scaled_features])
+    scaled_features = audio_feature_scaler.transform([scaled_features])[0]
 
     features_dict = {features_list[i]:scaled_features[i] for i in range(len(features_list))}
 
