@@ -3,6 +3,7 @@ let searchSpotifyData = {};
 let decadeValue = null;
 let songValue = null;
 let artistValue = null;
+let cleanFeatureData = [];
 
 // defining a dummy json output when we search a song or click for a decade
 let calledFeatures = {
@@ -85,7 +86,6 @@ function cleanData(featureData){
 };
 
 // creating dummy listening event for when a user searches for a song
-let typedSong = ""
 const songInput = document.querySelector('#search-song');
 const artistInput = document.querySelector('#search-artist');
 const buttonSubmit = document.querySelector('#submit');
@@ -108,18 +108,18 @@ buttonSubmit.addEventListener("click", (event) => {
       songUrl = `/search_spotify/${songValue}/${artistValue}`
 
       d3.json(songUrl).then(function(data){
+        let searchSpotifyData = {}
         searchSpotifyData = data;
-        console.log(searchSpotifyData)
-      })
-    }
-  }
-    // songData = cleanData(rawSongData)
-    // radarChart.data.datasets[0].data = songData;
-    // radarChart.update();
-    // console.log(songData)
+        songData = cleanData(searchSpotifyData)
+        radarChart.data.datasets[0].data = songData;
+        console.log(songData)
+        radarChart.update();
+        });
+      };
+  },
 );
 
-
+ console.log(searchSpotifyData)
 // adding dummy dropdown listener event
 const decadeInput = document.querySelector('#decade');
 
@@ -133,12 +133,11 @@ decadeInput.addEventListener('change', (e) => {
   d3.json(decadeURL).then(function(data){
     decadeRawData = data;
     
-    console.log(data)});
-
-  // decadeData = cleanData(rawDecadeData)
-  // radarChart.data.datasets[1].data = decadeData;
-  // radarChart.update();
-  // console.log(decadeInput.value)
+    console.log(data)})
+  decadeData = cleanData(rawDecadeData)
+  radarChart.data.datasets[1].data = decadeData;
+  radarChart.update();
+  console.log(decadeInput.value)
 
 });
 
@@ -193,14 +192,15 @@ function createChart(initialDecade){
 };
 
 // creating dummy song data as i expect the output to be like 
-// let songData = [];
+// let song_data = [];
 // for (let k in songFeatures) {
 //   for (let j in calledFeatures){
 //     if (j == songFeatures[k]) {
-//       songData.push(calledFeatures[j])
+//       song_data.push(calledFeatures[j])
 //     };
 //   };
 // };
+// console.log(song_data)
 
 // //creating dummy decade data as i expect the output to be like 
 // let decadeData = []
